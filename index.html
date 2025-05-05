@@ -1,208 +1,183 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Advanced Cool Calculator</title>
-  <style>
-    :root {
-      --bg: #0f2027;
-      --fg: #00ffc8;
-      --accent: #ff6ec7;
-      --error: #ff4b5c;
-      --bg-light: #f4f4f4;
-      --fg-light: #111;
-      --accent-light: #0077ff;
-    }
-
-    body.light {
-      --bg: var(--bg-light);
-      --fg: var(--fg-light);
-      --accent: var(--accent-light);
-    }
-
-    body {
-      margin: 0;
-      height: 100vh;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Segoe UI', sans-serif;
-      transition: background 0.5s;
-    }
-
-    .calculator {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 20px;
-      border-radius: 20px;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-      width: 320px;
-      color: var(--fg);
-    }
-
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .top-bar button {
-      background: none;
-      border: 1px solid var(--fg);
-      color: var(--fg);
-      padding: 5px 10px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 0.9em;
-    }
-
-    .display {
-      background: rgba(0, 0, 0, 0.3);
-      color: var(--fg);
-      padding: 20px;
-      border-radius: 10px;
-      font-size: 1.8em;
-      text-align: right;
-      margin-bottom: 15px;
-      min-height: 50px;
-      word-wrap: break-word;
-    }
-
-    .buttons {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-
-    .btn {
-      padding: 18px;
-      font-size: 1.2em;
-      background: rgba(0, 255, 200, 0.1);
-      border: none;
-      border-radius: 12px;
-      color: var(--fg);
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-
-    .btn:hover {
-      background: rgba(0, 255, 200, 0.3);
-    }
-
-    .operator { color: var(--accent); }
-    .equal { background: var(--fg); color: var(--bg); font-weight: bold; grid-column: span 2; }
-    .clear { background: var(--error); color: #fff; }
-
-    .error-shake {
-      animation: shake 0.3s;
-    }
-
-    @keyframes shake {
-      0% { transform: translateX(0px); }
-      25% { transform: translateX(-5px); }
-      50% { transform: translateX(5px); }
-      75% { transform: translateX(-5px); }
-      100% { transform: translateX(0px); }
-    }
-
-    @media (max-width: 400px) {
-      .calculator {
-        width: 90vw;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cool Theme Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #2c3e50;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            background-color: #34495e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .display {
+            background-color: #1abc9c;
+            color: white;
+            font-size: 2em;
+            padding: 10px;
+            border-radius: 5px;
+            width: 100%;
+            text-align: right;
+        }
+        .buttons {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 10px;
+        }
+        .button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 20px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .button:hover {
+            background-color: #c0392b;
+        }
+        .button:active {
+            background-color: #e74c3c;
+        }
+        .button.double {
+            grid-column: span 2;
+        }
+    </style>
 </head>
 <body>
-  <div class="calculator">
-    <div class="top-bar">
-      <h3>Calculator</h3>
-      <button onclick="toggleTheme()">Toggle Theme</button>
+
+    <div class="calculator">
+        <div class="display" id="display">0</div>
+        <div class="buttons">
+            <button class="button" id="clear">C</button>
+            <button class="button">/</button>
+            <button class="button">*</button>
+            <button class="button">-</button>
+            <button class="button">7</button>
+            <button class="button">8</button>
+            <button class="button">9</button>
+            <button class="button">+</button>
+            <button class="button">4</button>
+            <button class="button">5</button>
+            <button class="button">6</button>
+            <button class="button">.</button>
+            <button class="button">1</button>
+            <button class="button">2</button>
+            <button class="button">3</button>
+            <button class="button double">0</button>
+            <button class="button">=</button>
+        </div>
     </div>
-    <div id="display" class="display">0</div>
-    <div class="buttons">
-      <button class="btn clear" onclick="clearDisplay()">C</button>
-      <button class="btn" onclick="appendValue('%')">%</button>
-      <button class="btn" onclick="squareRoot()">√</button>
-      <button class="btn operator" onclick="appendValue('/')">÷</button>
 
-      <button class="btn" onclick="appendValue('7')">7</button>
-      <button class="btn" onclick="appendValue('8')">8</button>
-      <button class="btn" onclick="appendValue('9')">9</button>
-      <button class="btn operator" onclick="appendValue('*')">×</button>
+    <script>
+        const display = document.getElementById('display');
+        let currentInput = '0';
+        let operator = '';
+        let firstInput = '';
+        let secondInput = '';
+        let result = '';
 
-      <button class="btn" onclick="appendValue('4')">4</button>
-      <button class="btn" onclick="appendValue('5')">5</button>
-      <button class="btn" onclick="appendValue('6')">6</button>
-      <button class="btn operator" onclick="appendValue('-')">−</button>
+        // Function to update the display
+        function updateDisplay(value) {
+            display.textContent = value;
+        }
 
-      <button class="btn" onclick="appendValue('1')">1</button>
-      <button class="btn" onclick="appendValue('2')">2</button>
-      <button class="btn" onclick="appendValue('3')">3</button>
-      <button class="btn operator" onclick="appendValue('+')">+</button>
+        // Function to handle button clicks
+        function handleButtonClick(value) {
+            if (value === 'C') {
+                currentInput = '0';
+                firstInput = '';
+                secondInput = '';
+                operator = '';
+            } else if (value === '=') {
+                if (firstInput && operator && secondInput) {
+                    currentInput = calculate(firstInput, operator, secondInput);
+                    firstInput = currentInput;
+                    secondInput = '';
+                    operator = '';
+                }
+            } else if (['+', '-', '*', '/'].includes(value)) {
+                if (firstInput && operator && secondInput) {
+                    currentInput = calculate(firstInput, operator, secondInput);
+                    firstInput = currentInput;
+                    secondInput = '';
+                }
+                operator = value;
+            } else if (value === '.') {
+                if (!currentInput.includes('.')) {
+                    currentInput += value;
+                }
+            } else {
+                if (currentInput === '0') {
+                    currentInput = value;
+                } else {
+                    currentInput += value;
+                }
+            }
 
-      <button class="btn" onclick="appendValue('0')">0</button>
-      <button class="btn" onclick="appendValue('.')">.</button>
-      <button class="btn" onclick="square()">x²</button>
-      <button class="btn equal" onclick="calculate()">=</button>
-    </div>
-  </div>
+            if (operator) {
+                secondInput = currentInput;
+            } else {
+                firstInput = currentInput;
+            }
 
-  <script>
-    const display = document.getElementById('display');
-    let theme = 'dark';
+            updateDisplay(currentInput);
+        }
 
-    function appendValue(val) {
-      if (display.textContent === '0' || display.textContent === 'Error') {
-        display.textContent = val;
-      } else {
-        display.textContent += val;
-      }
-    }
+        // Function to calculate the result
+        function calculate(first, operator, second) {
+            first = parseFloat(first);
+            second = parseFloat(second);
 
-    function clearDisplay() {
-      display.textContent = '0';
-    }
+            switch (operator) {
+                case '+':
+                    return (first + second).toString();
+                case '-':
+                    return (first - second).toString();
+                case '*':
+                    return (first * second).toString();
+                case '/':
+                    return (first / second).toString();
+                default:
+                    return '';
+            }
+        }
 
-    function calculate() {
-      try {
-        display.textContent = eval(display.textContent.replace('%', '/100'));
-      } catch {
-        display.textContent = 'Error';
-        triggerShake();
-      }
-    }
+        // Add event listeners to all buttons
+        const buttons = document.querySelectorAll('.button');
+        buttons.forEach(button => {
+            button.addEventListener('click', () => handleButtonClick(button.textContent));
+        });
 
-    function squareRoot() {
-      try {
-        let result = Math.sqrt(eval(display.textContent));
-        display.textContent = result;
-      } catch {
-        display.textContent = 'Error';
-        triggerShake();
-      }
-    }
+        // Add keyboard support
+        document.addEventListener('keydown', (event) => {
+            const key = event.key;
+            if (key >= '0' && key <= '9') {
+                handleButtonClick(key);
+            } else if (key === 'Enter' || key === '=') {
+                handleButtonClick('=');
+            } else if (key === 'Backspace') {
+                handleButtonClick('C');
+            } else if (key === '.') {
+                handleButtonClick('.');
+            } else if (['+', '-', '*', '/'].includes(key)) {
+                handleButtonClick(key);
+            }
+        });
+    </script>
 
-    function square() {
-      try {
-        let result = Math.pow(eval(display.textContent), 2);
-        display.textContent = result;
-      } catch {
-        display.textContent = 'Error';
-        triggerShake();
-      }
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle('light');
-    }
-
-    function triggerShake() {
-      display.classList.add('error-shake');
-      setTimeout(() => display.classList.remove('error-shake'), 300);
-    }
-  </script>
 </body>
 </html>
