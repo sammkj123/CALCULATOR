@@ -1,183 +1,139 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cool Theme Calculator</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #2c3e50;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .calculator {
-            background-color: #34495e;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-        .display {
-            background-color: #1abc9c;
-            color: white;
-            font-size: 2em;
-            padding: 10px;
-            border-radius: 5px;
-            width: 100%;
-            text-align: right;
-        }
-        .buttons {
-            margin-top: 20px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-gap: 10px;
-        }
-        .button {
-            background-color: #e74c3c;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            padding: 20px;
-            font-size: 1.5em;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .button:hover {
-            background-color: #c0392b;
-        }
-        .button:active {
-            background-color: #e74c3c;
-        }
-        .button.double {
-            grid-column: span 2;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Colorful Calculator</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #74ebd5, #acb6e5);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .calculator {
+      background-color: #ffffffcc;
+      padding: 20px;
+      border-radius: 20px;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+      max-width: 300px;
+      width: 100%;
+    }
+
+    .display {
+      width: 100%;
+      height: 60px;
+      background: #222;
+      color: #0f0;
+      font-size: 2em;
+      text-align: right;
+      padding: 10px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+
+    button {
+      padding: 20px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    button.operator { background: #ff7675; color: white; }
+    button.equal { background: #55efc4; color: black; grid-column: span 2; }
+    button.clear { background: #fdcb6e; color: black; }
+    button.number { background: #74b9ff; color: white; }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 400px) {
+      .display {
+        font-size: 1.5em;
+      }
+
+      button {
+        padding: 15px;
+        font-size: 1em;
+      }
+    }
+  </style>
 </head>
 <body>
+  <div class="calculator">
+    <div id="display" class="display">0</div>
+    <div class="buttons">
+      <button class="clear" onclick="clearDisplay()">C</button>
+      <button class="operator" onclick="appendOperator('/')">÷</button>
+      <button class="operator" onclick="appendOperator('*')">×</button>
+      <button class="operator" onclick="appendOperator('-')">−</button>
 
-    <div class="calculator">
-        <div class="display" id="display">0</div>
-        <div class="buttons">
-            <button class="button" id="clear">C</button>
-            <button class="button">/</button>
-            <button class="button">*</button>
-            <button class="button">-</button>
-            <button class="button">7</button>
-            <button class="button">8</button>
-            <button class="button">9</button>
-            <button class="button">+</button>
-            <button class="button">4</button>
-            <button class="button">5</button>
-            <button class="button">6</button>
-            <button class="button">.</button>
-            <button class="button">1</button>
-            <button class="button">2</button>
-            <button class="button">3</button>
-            <button class="button double">0</button>
-            <button class="button">=</button>
-        </div>
+      <button class="number" onclick="appendNumber('7')">7</button>
+      <button class="number" onclick="appendNumber('8')">8</button>
+      <button class="number" onclick="appendNumber('9')">9</button>
+      <button class="operator" onclick="appendOperator('+')">+</button>
+
+      <button class="number" onclick="appendNumber('4')">4</button>
+      <button class="number" onclick="appendNumber('5')">5</button>
+      <button class="number" onclick="appendNumber('6')">6</button>
+      <button class="equal" onclick="calculateResult()">=</button>
+
+      <button class="number" onclick="appendNumber('1')">1</button>
+      <button class="number" onclick="appendNumber('2')">2</button>
+      <button class="number" onclick="appendNumber('3')">3</button>
+      <button class="number" onclick="appendNumber('0')">0</button>
     </div>
+  </div>
 
-    <script>
-        const display = document.getElementById('display');
-        let currentInput = '0';
-        let operator = '';
-        let firstInput = '';
-        let secondInput = '';
-        let result = '';
+  <script>
+    let display = document.getElementById('display');
+    let currentInput = '';
 
-        // Function to update the display
-        function updateDisplay(value) {
-            display.textContent = value;
-        }
+    function appendNumber(num) {
+      if (display.innerText === '0') {
+        currentInput = num;
+      } else {
+        currentInput += num;
+      }
+      display.innerText = currentInput;
+    }
 
-        // Function to handle button clicks
-        function handleButtonClick(value) {
-            if (value === 'C') {
-                currentInput = '0';
-                firstInput = '';
-                secondInput = '';
-                operator = '';
-            } else if (value === '=') {
-                if (firstInput && operator && secondInput) {
-                    currentInput = calculate(firstInput, operator, secondInput);
-                    firstInput = currentInput;
-                    secondInput = '';
-                    operator = '';
-                }
-            } else if (['+', '-', '*', '/'].includes(value)) {
-                if (firstInput && operator && secondInput) {
-                    currentInput = calculate(firstInput, operator, secondInput);
-                    firstInput = currentInput;
-                    secondInput = '';
-                }
-                operator = value;
-            } else if (value === '.') {
-                if (!currentInput.includes('.')) {
-                    currentInput += value;
-                }
-            } else {
-                if (currentInput === '0') {
-                    currentInput = value;
-                } else {
-                    currentInput += value;
-                }
-            }
+    function appendOperator(op) {
+      if (currentInput === '') return;
+      const lastChar = currentInput.slice(-1);
+      if ("+-*/".includes(lastChar)) {
+        currentInput = currentInput.slice(0, -1);
+      }
+      currentInput += op;
+      display.innerText = currentInput;
+    }
 
-            if (operator) {
-                secondInput = currentInput;
-            } else {
-                firstInput = currentInput;
-            }
+    function calculateResult() {
+      try {
+        currentInput = eval(currentInput).toString();
+      } catch {
+        currentInput = 'Error';
+      }
+      display.innerText = currentInput;
+    }
 
-            updateDisplay(currentInput);
-        }
-
-        // Function to calculate the result
-        function calculate(first, operator, second) {
-            first = parseFloat(first);
-            second = parseFloat(second);
-
-            switch (operator) {
-                case '+':
-                    return (first + second).toString();
-                case '-':
-                    return (first - second).toString();
-                case '*':
-                    return (first * second).toString();
-                case '/':
-                    return (first / second).toString();
-                default:
-                    return '';
-            }
-        }
-
-        // Add event listeners to all buttons
-        const buttons = document.querySelectorAll('.button');
-        buttons.forEach(button => {
-            button.addEventListener('click', () => handleButtonClick(button.textContent));
-        });
-
-        // Add keyboard support
-        document.addEventListener('keydown', (event) => {
-            const key = event.key;
-            if (key >= '0' && key <= '9') {
-                handleButtonClick(key);
-            } else if (key === 'Enter' || key === '=') {
-                handleButtonClick('=');
-            } else if (key === 'Backspace') {
-                handleButtonClick('C');
-            } else if (key === '.') {
-                handleButtonClick('.');
-            } else if (['+', '-', '*', '/'].includes(key)) {
-                handleButtonClick(key);
-            }
-        });
-    </script>
-
+    function clearDisplay() {
+      currentInput = '';
+      display.innerText = '0';
+    }
+  </script>
 </body>
 </html>
